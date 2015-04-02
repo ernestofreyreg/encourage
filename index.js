@@ -3,8 +3,8 @@
 "use strict";
 
 var
-    apiUsers_Query,
-    apiUsers_Create,
+    apiUsersQuery,
+    apiUsersCreate,
     apiAuthLogin,
     apiAuthLogout,
 
@@ -95,7 +95,7 @@ logoutUser = function (db, authToken, callback) {
     });
 };
 
-apiUsers_Query = function (req, res) {
+apiUsersQuery = function (req, res) {
     var
         userName;
 
@@ -104,6 +104,7 @@ apiUsers_Query = function (req, res) {
     mongo_client.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: "+err.toString());
+            return res.sendStatus(500);
         }
 
         var
@@ -126,7 +127,7 @@ apiUsers_Query = function (req, res) {
     });
 };
 
-apiUsers_Create = function (req, res) {
+apiUsersCreate = function (req, res) {
     if (!req.body) {
         return res.sendStatus(400);
     }
@@ -143,6 +144,7 @@ apiUsers_Create = function (req, res) {
     mongo_client.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
+            return res.sendStatus(500);
         }
 
         var
@@ -179,6 +181,7 @@ apiAuthLogin = function (req, res) {
     mongo_client.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
+            return res.sendStatus(500);
         }
 
         dbf.findDocuments(db, "users", {"username": req.body.username}, function (err, docs) {
@@ -206,6 +209,7 @@ apiAuthLogout = function (req, res) {
     mongo_client.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
+            return res.sendStatus(500);
         }
 
         logoutUser(db, req.body.authToken, function(err, result) {
@@ -220,8 +224,8 @@ apiAuthLogout = function (req, res) {
 };
 
 
-app.get('/api/users/:userName', apiUsers_Query);
-app.post('/api/users', apiUsers_Create);
+app.get('/api/users/:userName', apiUsersQuery);
+app.post('/api/users', apiUsersCreate);
 app.post('/api/auth/login', apiAuthLogin);
 app.post('/api/auth/logout', apiAuthLogout);
 
