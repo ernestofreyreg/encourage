@@ -16,11 +16,11 @@ var
     express,
     dbf,
     uuid,
-    mongo_client,
+    mongoClient,
     bodyParser,
     app,
     server,
-    _,
+
     loginUser,
     logoutUser,
     ensureAuthentication;
@@ -28,12 +28,11 @@ var
 
 express = require('express');
 bodyParser = require('body-parser');
-_ = require('lodash');
 uuid = require('node-uuid');
-mongo_client = require('mongodb').MongoClient;
+mongoClient = require('mongodb').MongoClient;
 dbf = require('./mongofuncs')();
 
-mongo_client.connect(mongoServerURL, function(err, db) {
+mongoClient.connect(mongoServerURL, function(err, db) {
     if (err) {
         console.log("Error conecting to DB server.");
         return;
@@ -48,7 +47,7 @@ app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 ensureAuthentication = function (req, res, next) {
-    mongo_client.connect(mongoServerURL, function (err, db) {
+    mongoClient.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
             return res.sendStatus(403);
@@ -101,7 +100,7 @@ apiUsersQuery = function (req, res) {
 
     userName = req.params.userName;
 
-    mongo_client.connect(mongoServerURL, function (err, db) {
+    mongoClient.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: "+err.toString());
             return res.sendStatus(500);
@@ -141,7 +140,7 @@ apiUsersCreate = function (req, res) {
 
     userInfo = req.body;
 
-    mongo_client.connect(mongoServerURL, function (err, db) {
+    mongoClient.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
             return res.sendStatus(500);
@@ -178,7 +177,7 @@ apiUsersCreate = function (req, res) {
 };
 
 apiAuthLogin = function (req, res) {
-    mongo_client.connect(mongoServerURL, function (err, db) {
+    mongoClient.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
             return res.sendStatus(500);
@@ -206,7 +205,7 @@ apiAuthLogin = function (req, res) {
 };
 
 apiAuthLogout = function (req, res) {
-    mongo_client.connect(mongoServerURL, function (err, db) {
+    mongoClient.connect(mongoServerURL, function (err, db) {
         if (err) {
             console.log("MONGODB Error: " + err.toString());
             return res.sendStatus(500);

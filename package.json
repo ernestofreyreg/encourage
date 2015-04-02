@@ -11,7 +11,6 @@
   "dependencies": {
     "body-parser": "^1.12.2",
     "express": "^4.12.3",
-    "lodash": "^3.5.0",
     "mongodb": "^2.0.25",
     "node-uuid": "^1.4.3"
   }
